@@ -18,10 +18,10 @@ def handlefiles(srclist, codelist):
     results = dict();
     for val in codelist:
         if val not in fpset:
-            FileName = "../temp/Check" + str(counter) + ".js";
-            AnalyzedFileName = "../temp/Analysis/CFG/Check" + str(counter);
+            FileName = os.path.join(SRC_PATH,"..","temp","Check" + str(counter), ".js");
+            AnalyzedFileName = os.path.join(SRC_PATH,"..","temp","Analysis","CFG","Check" + str(counter));
             records[val] = AnalyzedFileName
-            f = open(FileName, "w", encoding="utf-8")
+            f = open(FileName, "w+", encoding="utf-8")
             f.write(val + "")
             counter+=1;
         else:
@@ -40,10 +40,10 @@ def handlefiles(srclist, codelist):
             except requests.TooManyRedirects as e:
                 continue;
             if response.status_code == 200:
-                FileName = "../temp/Check" + str(counter) + ".js";
-                AnalyzedFileName = "../temp/Analysis/CFG/Check" + str(counter) ;
+                FileName = os.path.join(SRC_PATH, "..", "temp", "Check" + str(counter), ".js");
+                AnalyzedFileName = os.path.join(SRC_PATH, "..", "temp", "Analysis", "CFG", "Check" + str(counter));
                 records[url] =AnalyzedFileName;
-                f = open(FileName, "w", encoding="utf-8")
+                f = open(FileName, "w+", encoding="utf-8")
                 f.write(response.text + "");
                 counter += 1;
         else:
