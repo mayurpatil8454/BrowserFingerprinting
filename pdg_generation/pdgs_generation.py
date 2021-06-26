@@ -34,7 +34,7 @@ GIT_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..'))
 
 def pickle_dump_process(dfg_nodes, store_pdg):
     """ Call to pickle.dump """
-
+    print(store_pdg)
     pickle.dump(dfg_nodes, open(store_pdg, 'wb'))
 
 
