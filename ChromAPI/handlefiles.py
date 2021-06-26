@@ -54,7 +54,16 @@ def handlefiles(srclist, codelist):
             results[url] = fpset[url];
     #Calculate the CFG of all files
     cfg.store_cfg_folder(os.path.join(SRC_PATH,"..", "temp"));
-
+    for root, dirs, files in os.walk(os.path.join(SRC_PATH,"..","temp")):
+        for f in files:
+            print(f);
+        for d in dirs:
+            print(d)
+    for root, dirs, files in os.walk(os.path.join(SRC_PATH,"..","temp","Analysis")):
+        for f in files:
+            print(f);
+        for d in dirs:
+            print(d)
     for root, dirs, files in os.walk(os.path.join(SRC_PATH,"..","temp","Analysis","CFG")):
         for f in files:
             print(f);
