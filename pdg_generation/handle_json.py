@@ -51,10 +51,11 @@ def get_extended_ast(input_file, json_path='1', remove_json=True):
             possibly leadingComments) of input_file.
         - None if an error occurred.
     """
-
+    print("Inside Handlejson")
     produce_ast = run(['node', os.path.join(SRC_PATH, 'js_ast.js'), input_file, json_path],
                       stdout=PIPE)
     if produce_ast.returncode == 0:
+        print("AST got")
         if json_path == '1':
             ast = produce_ast.stdout.decode('utf-8').replace('\n', '')
             return ast.split('##!!**##')
@@ -73,7 +74,7 @@ def get_extended_ast(input_file, json_path='1', remove_json=True):
             extended_ast.set_comments(esprima_ast['comments'])
             if 'leadingComments' in esprima_ast:
                 extended_ast.set_leading_comments(esprima_ast['leadingComments'])
-
+            print("received AST")
             return extended_ast
     logging.error('Esprima could not produce an AST for %s', input_file)
     return None
