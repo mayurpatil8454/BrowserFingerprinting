@@ -66,7 +66,7 @@ def get_data_flow(input_file, benchmarks, store_pdgs=None, check_var=False,
             PDG of the file
         - or None.
     """
-
+    print(input_file);
     start = timeit.default_timer()
     if input_file.endswith('.js'):
         esprima_json = input_file.replace('.js', '.json')
@@ -74,18 +74,21 @@ def get_data_flow(input_file, benchmarks, store_pdgs=None, check_var=False,
         esprima_json = input_file + '.json'
 
     extended_ast = get_extended_ast(input_file, esprima_json)
+    print("Extended AST");
     if extended_ast is not None:
         benchmarks['got AST'] = timeit.default_timer() - start
         start = micro_benchmark('Successfully got Esprima AST in', timeit.default_timer() - start)
         ast = extended_ast.get_ast()
         # beautiful_print_ast(ast, delete_leaf=[])
         ast_nodes = ast_to_ast_nodes(ast, ast_nodes=Node('Program'))
+        print("AST");
         # ast_nodes = search_dynamic(ast_nodes)  # Tried to handle dynamically generated JS
         benchmarks['AST'] = timeit.default_timer() - start
         start = micro_benchmark('Successfully produced the AST in', timeit.default_timer() - start)
         if save_path_ast is not False:
             draw_ast(ast_nodes, attributes=True, save_path=save_path_ast)
         cfg_nodes = build_cfg(ast_nodes)
+        print("build CFG");
         benchmarks['CFG'] = timeit.default_timer() - start
         start = micro_benchmark('Successfully produced the CFG in', timeit.default_timer() - start)
         if save_path_cfg is not False:
@@ -118,81 +121,9 @@ def get_data_flow(input_file, benchmarks, store_pdgs=None, check_var=False,
                 logging.error('Something wrong occurred to pickle the PDG of %s', store_pdg)
                 if os.path.isfile(store_pdg) and os.stat(store_pdg).st_size == 0:
                     os.remove(store_pdg)
-        features_list = list()
-        get_cfg_features(dfg_nodes, features_list=features_list, handled_set=set(),
-                         handled_features_set=set())
-        # print(features_list);
+
         return dfg_nodes
     return None
-
-counter =0;
-def get_cfg_features(pdg, features_list, handled_set, handled_features_set):
-    """ To provide complete code coverage while following only the CF. """
-
-    for child in pdg.children:
-        if child.id not in handled_set:
-            traverse_cfg(child, features_list, handled_set, handled_features_set)
-        get_cfg_features(child, features_list, handled_set, handled_features_set)
-
-
-def traverse_cfg(pdg, features_list, handled_set, handled_features_set):
-    """
-        Given the PDG of a JavaScript file, create a list containing the esprima syntactic
-        units with a Control dependency.
-        The order of the units stored in the previous list resembles a tree traversal using
-        the depth-first pre order.
-
-        -------
-        Parameters:
-        - pdg: node
-            PDG of the JS file to analyze.
-        - features_list: list
-            Contains the units found so far.
-        - handled_list: list
-            Contains the nodes id handled so far.
-    """
-
-    if pdg.control_dep_children:
-        features_list.append(pdg.name)
-        handled_features_set.add(pdg.id)  # Store id from features handled
-        get_ast_features(pdg, features_list, handled_features_set)  # Handled only once
-        # print(features_list);
-    for control_dep in pdg.control_dep_children:
-        control_flow = control_dep.extremity
-        # Otherwise missing CF pointing to a node already analyzed
-        if not control_flow.control_dep_children or control_flow.id in handled_set:
-            features_list.append(control_flow.name)
-        # else: the node name will be added while calling traverse_cfg
-        if control_flow.id not in handled_set:
-            handled_set.add(control_flow.id)
-            handled_features_set.add(control_flow.id)  # Store id from features
-            get_ast_features(control_flow, features_list, handled_features_set)  # Once
-            traverse_cfg(control_flow, features_list, handled_set, handled_features_set)
-
-def get_ast_features(pdg, features_list, handled_set):
-    """
-        Given the PDG of a JavaScript file, create a list containing the esprima syntactic
-        units.
-        The order of the units stored in the previous list resembles a tree traversal using
-        the depth-first pre order.
-
-        -------
-        Parameters:
-        - pdg: node
-            PDG of the JS file to analyze.
-        - features_list: list
-            Contains the units found so far.
-        - handled_list: list
-            Contains the nodes id handled so far.
-    """
-
-    for child in pdg.children:
-        if child.id not in handled_set:
-            handled_set.add(child.id)
-            features_list.append(child.name)
-            get_ast_features(child, features_list, handled_set)
-            #print(features_list);
-
 
 
 
@@ -200,7 +131,7 @@ def handle_one_pdg(root, js, store_pdgs):
     """ Stores the PDG of js located in root, in store_pdgs. """
 
     benchmarks = dict()
-    #print(os.path.join(store_pdgs, js.replace('.js', '')))
+    print(os.path.join(store_pdgs, js.replace('.js', '')))
     get_data_flow(input_file=os.path.join(root, js), benchmarks=benchmarks,
                   store_pdgs=store_pdgs)
 
