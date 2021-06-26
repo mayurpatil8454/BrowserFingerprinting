@@ -84,6 +84,7 @@ def main_classification():      # algo = arg_obj['algo']
     else:
         """Get JS FIles from temp"""
         js_files =[];
+        print(os.listdir(setup.ChromePath));
         for cfile in os.listdir(setup.ChromePath):  #getallfiles of dicr
             js_files.append(os.path.join(setup.ChromePath, cfile))
 
