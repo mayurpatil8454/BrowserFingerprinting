@@ -59,7 +59,6 @@ def handlefiles(srclist, codelist):
     filename , value = cl.main_classification();
 
     results = reverseConnection(records,filename,value,results)
-
     #removefiles
 
     for root, dirs, files in os.walk(os.path.join(SRC_PATH,"..","temp")):
@@ -73,16 +72,17 @@ def handlefiles(srclist, codelist):
 
 
 
-
-
-
-def reverseConnection(records,filename,value,results):
-
+def reverseConnection(records,filenames,value,results):
+    print(filenames);
+    arr =[];
+    for filename in filenames:
+        arr.append((filename.split(".."))[1])
+    print(arr);
     for src, file in records.items():
         print(src,file);
-        if file in filename:
-            index = filename.index(file);
+        if (file.split(".."))[1] in arr:
+            index = arr.index((file.split(".."))[1] );
             results[src] = value[index];
-
+    print(results)
     return results;
 
