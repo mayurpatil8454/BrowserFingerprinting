@@ -10,9 +10,13 @@ import pdgs_generation as cfg;
 
 sys.path.insert(0,os.path.join(SRC_PATH,'..','ModelCreation'))
 import classifier as cl;
+
+if not os.path.exists(os.path.join(SRC_PATH,"..","temp")):
+    os.makedirs(os.path.join(SRC_PATH,"..","temp"))
 import psutil
 
 def handlefiles(srclist, codelist):
+
     records = dict()
     counter =0;
     results = dict();
