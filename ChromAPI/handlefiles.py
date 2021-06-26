@@ -53,7 +53,7 @@ def handlefiles(srclist, codelist):
         else:
             results[url] = fpset[url];
     #Calculate the CFG of all files
-    cfg.store_cfg_folder(os.path.join('..', 'temp'));
+    cfg.store_cfg_folder(os.path.join(SRC_PATH,"..", "temp"));
 
     #Calculate the classification of files
     filename , value = cl.main_classification();
@@ -62,13 +62,15 @@ def handlefiles(srclist, codelist):
 
     #removefiles
 
-    for root, dirs, files in os.walk('../temp'):
+    for root, dirs, files in os.walk(os.path.join(SRC_PATH,"..","temp")):
         for f in files:
             os.unlink(os.path.join(root, f))
         for d in dirs:
             shutil.rmtree(os.path.join(root, d))
 
     return results;
+
+
 
 
 
@@ -83,7 +85,4 @@ def reverseConnection(records,filename,value,results):
             results[src] = value[index];
 
     return results;
-
-
-
 
