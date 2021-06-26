@@ -87,7 +87,7 @@ def main_classification():      # algo = arg_obj['algo']
         for cfile in os.listdir(setup.ChromePath):  #getallfiles of dicr
             js_files.append(os.path.join(setup.ChromePath, cfile))
 
-
+        print(js_files);
         names, attributes, labels = static_analysis.main_analysis\
             (js_dirs=None, labels_dirs=None, js_files=js_files, labels_files=None,
              n=setup.ngramssize, features2int_dict_path=features2int_dict_path)
