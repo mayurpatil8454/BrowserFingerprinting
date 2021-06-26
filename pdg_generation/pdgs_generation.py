@@ -260,6 +260,6 @@ def store_cfg_folder(folder_js):
 
 
 
-
-if __name__ == "__main__":  # Executed only if run as a script
-    get_data_flow(os.path.abspath(os.path.join(os.path.dirname(__file__), 'CFGDummy.js')),dict());
+#
+# if __name__ == "__main__":  # Executed only if run as a script
+#     get_data_flow(os.path.abspath(os.path.join(os.path.dirname(__file__), 'CFGDummy.js')),dict());
