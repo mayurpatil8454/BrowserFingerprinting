@@ -1,3 +1,5 @@
+import os
+SRC_PATH = os.path.abspath(os.path.dirname(__file__))
 
 #paths
 calculated_cfg = "/Analysis/CFG"
@@ -19,10 +21,10 @@ ValidateArray = [fp_samples_validate_path,Non_fp_samples_validate_path]
 TestArray = [Base_Fp_Test_Path , Base_NonFp_Test_Path] #uncomment to  check base paper dataset
 #modelStoredpath
 
-model = "../Analysis";
+model = os.path.join(SRC_PATH,"..","Analysis");
 algo = "rf";
 ngramssize = 5;
 rftreesize = 700;
 threshhold = 0.5;
 ChromeAPIflag = 1
-ChromePath = "../temp" + calculated_cfg;
+ChromePath = os.path.join(SRC_PATH,"..","temp","Analysis","CFG" );
