@@ -1,4 +1,4 @@
-beautifulsoup4==4.9.3
+
 certifi==2020.12.5
 chardet==4.0.0
 click==8.0.1
@@ -8,13 +8,11 @@ EditorConfig==0.12.3
 Flask==2.0.1
 Flask-Caching==1.10.1
 Flask-Cors==3.0.10
-graphviz==0.16
 idna==2.10
 importlib-metadata==4.5.0
 itsdangerous==2.0.1
 Jinja2==3.0.1
 joblib==1.0.1
-jsbeautifier==1.13.13
 kiwisolver==1.3.1
 MarkupSafe==2.0.1
 matplotlib==3.3.4
