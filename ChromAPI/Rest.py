@@ -4,6 +4,7 @@ from flask_cors import CORS, cross_origin
 import handlefiles as hf
 
 import os;
+SRC_PATH = os.path.abspath(os.path.dirname(__file__))
 app = Flask(__name__)
 cors = CORS(app);
 app.config['CORS_HEADERS'] = 'Content-Type'
@@ -52,7 +53,7 @@ def getFpCode():
 
 @app.route("/getCSV",methods =['GET','POST'])
 def getPlotCSV():
-    with open("cachedata.csv") as fp:
+    with open(r""+os.path.join(SRC_PATH,"cachedata.csv") +"") as fp:
         csv = fp.read()
     # csv = '1,2,3\n4,5,6\n'
     return Response(
