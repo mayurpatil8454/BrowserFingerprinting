@@ -18,12 +18,11 @@ if not os.path.exists(os.path.join(SRC_PATH,"..","temp")):
 import psutil
 
 def handlefiles(srclist, codelist):
-    cacheData = pd.read_csv(r"cachedata.csv");
+    cacheData = pd.read_csv(r""+os.path.join(SRC_PATH,"cachedata.csv") +"");
     records = dict()
     counter =0;
     results = dict();
     for val in codelist:
-        print(val);
         md5val = (hashlib.md5(val.encode('utf-8')).hexdigest())
         flag = True;
         for row in cacheData.index:
@@ -36,7 +35,7 @@ def handlefiles(srclist, codelist):
             AnalyzedFileName = os.path.join(SRC_PATH,"..","temp","Analysis","CFG","Check" + str(counter)+ ".pbz2");
             records[val] = AnalyzedFileName
             f = open(FileName, "w+", encoding="utf-8")
-            print("1          aslasa"+val)
+
             f.write(val + "")
             counter+=1;
             f.close();
@@ -114,7 +113,7 @@ def reverseConnection(records,filenames,value,results):
             else:
                 md5val = (hashlib.md5(src.encode('utf-8')).hexdigest())
                 cacherow = [md5val, value[index]];
-            with open(r'cachedata.csv', 'a') as f:
+            with open(r""+os.path.join(SRC_PATH,"cachedata.csv") +"", 'a') as f:
                 writer = csv.writer(f)
                 writer.writerow(cacherow)
     print(results)
