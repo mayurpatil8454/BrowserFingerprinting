@@ -3,6 +3,8 @@
 import sys
 import os
 import pickle
+import bz2
+import _pickle as cPickle
 import logging
 from subprocess import run, PIPE
 
@@ -48,7 +50,9 @@ def extract_syntactic_features(pdg_path):
     logging.debug('Analysis of %s', pdg_path)
     try:
         if os.stat(pdg_path).st_size < 25000000:  # Avoids handling CFGs over 25MB for perf reasons
-            pdg = pickle.load(open(pdg_path, 'rb'))
+            # pdg = pickle.load(open(pdg_path, 'rb'))
+            data = bz2.BZ2File(pdg_path,'rb')
+            pdg = cPickle.load(data);
             features_list = list()
             get_cfg_features(pdg, features_list=features_list, handled_set=set(), handled_features_set=set())
 

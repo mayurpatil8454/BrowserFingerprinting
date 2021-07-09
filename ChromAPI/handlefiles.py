@@ -45,7 +45,7 @@ def handlefiles(srclist, codelist):
                 continue;
             if response.status_code == 200:
                 FileName = os.path.join(SRC_PATH, "..", "temp", "Check" + str(counter)+".js");
-                AnalyzedFileName = os.path.join(SRC_PATH, "..", "temp", "Analysis", "CFG", "Check" + str(counter));
+                AnalyzedFileName = os.path.join(SRC_PATH, "..", "temp", "Analysis", "CFG", "Check" + str(counter) + ".pbz2");
                 records[url] =AnalyzedFileName;
                 f = open(FileName, "w+", encoding="utf-8")
                 f.write(response.text + "");
@@ -54,21 +54,6 @@ def handlefiles(srclist, codelist):
             results[url] = fpset[url];
     #Calculate the CFG of all files
     cfg.store_cfg_folder(os.path.join(SRC_PATH,"..", "temp"));
-    for root, dirs, files in os.walk(os.path.join(SRC_PATH,"..","temp")):
-        for f in files:
-            print(f);
-        for d in dirs:
-            print(d)
-    for root, dirs, files in os.walk(os.path.join(SRC_PATH,"..","temp","Analysis")):
-        for f in files:
-            print(f);
-        for d in dirs:
-            print(d)
-    for root, dirs, files in os.walk(os.path.join(SRC_PATH,"..","temp","Analysis","CFG")):
-        for f in files:
-            print(f);
-        for d in dirs:
-            print(d)
 
 
     #Calculate the classification of files

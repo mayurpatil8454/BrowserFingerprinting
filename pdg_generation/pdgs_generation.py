@@ -16,8 +16,9 @@
     Generation and storage of JavaScript PDGs. Possibility for multiprocessing (NUM_WORKERS
     defined in utility_df.py).
 """
-
+import bz2
 import pickle
+import _pickle as cPickle
 import psutil
 from multiprocessing import Process, Queue
 
@@ -35,8 +36,9 @@ GIT_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..'))
 def pickle_dump_process(dfg_nodes, store_pdg):
     """ Call to pickle.dump """
     print(store_pdg)
-    pickle.dump(dfg_nodes, open(store_pdg, 'wb'))
-
+    # pickle.dump(dfg_nodes, open(store_pdg, 'wb'))
+    with bz2.BZ2File(store_pdg +'.pbz2','wb') as f:
+        cPickle.dump(dfg_nodes, f)
 
 def get_data_flow(input_file, benchmarks, store_pdgs=None, check_var=False,
                   save_path_ast=False, save_path_cfg=False, save_path_pdg=False):
