@@ -1,4 +1,4 @@
-from flask import Flask,request,jsonify
+from flask import Flask,request,jsonify,Response
 from flask_cors import CORS, cross_origin
 
 import handlefiles as hf
@@ -49,6 +49,18 @@ def getFpCode():
             object[data] = codesdf[data];
     print(object);
     return jsonify(object)
+
+@app.route("/getCSV",methods =['GET','POST'])
+def getPlotCSV():
+    with open("cachedata.csv") as fp:
+        csv = fp.read()
+    # csv = '1,2,3\n4,5,6\n'
+    return Response(
+        csv,
+        mimetype="text/csv",
+        headers={"Content-disposition":
+                 "attachment; filename=mydata.csv"})
+
 
 if __name__ == '__main__':
     # Bind to PORT if defined, otherwise default to 5000.

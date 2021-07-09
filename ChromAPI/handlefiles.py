@@ -1,8 +1,10 @@
 import requests;
 import os;
 import sys;
-import shutil
-from Rest import fpset;
+import shutil;
+import pandas as pd;
+import hashlib;
+import csv;
 
 SRC_PATH = os.path.abspath(os.path.dirname(__file__))
 sys.path.insert(0, os.path.join(SRC_PATH, '..','pdg_generation'));
@@ -16,22 +18,38 @@ if not os.path.exists(os.path.join(SRC_PATH,"..","temp")):
 import psutil
 
 def handlefiles(srclist, codelist):
-
+    cacheData = pd.read_csv(r"cachedata.csv");
     records = dict()
     counter =0;
     results = dict();
     for val in codelist:
-        if val not in fpset:
+        print(val);
+        md5val = (hashlib.md5(val.encode('utf-8')).hexdigest())
+        flag = True;
+        for row in cacheData.index:
+            if cacheData['data'][row] == md5val:
+                results[val] = cacheData['res'][row];
+                flag = False;
+                break;
+        if flag:
             FileName = os.path.join(SRC_PATH,"..","temp","Check" + str(counter)+".js");
             AnalyzedFileName = os.path.join(SRC_PATH,"..","temp","Analysis","CFG","Check" + str(counter)+ ".pbz2");
             records[val] = AnalyzedFileName
             f = open(FileName, "w+", encoding="utf-8")
+            print("1          aslasa"+val)
             f.write(val + "")
             counter+=1;
-        else:
-            results[val] = fpset[val];
+            f.close();
+        # else:
+        #     results[val] = fpset[val];
     for url in srclist:
-        if url not in fpset:
+        flag = True;
+        for row in cacheData.index:
+            if cacheData['data'][row] == url:
+                results[url] = cacheData['res'][row];
+                flag = False;
+                break;
+        if flag:
             try:   # Creating Session and Header
                 s = requests.Session()
                 s.headers['User-Agent'] = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/34.0.1847.131 Safari/537.36';
@@ -50,23 +68,29 @@ def handlefiles(srclist, codelist):
                 f = open(FileName, "w+", encoding="utf-8")
                 f.write(response.text + "");
                 counter += 1;
-        else:
-            results[url] = fpset[url];
+        # else:
+        #     results[url] = fpset[url];
     #Calculate the CFG of all files
-    cfg.store_cfg_folder(os.path.join(SRC_PATH,"..", "temp"));
+    if counter > 0:
+        cfg.store_cfg_folder(os.path.join(SRC_PATH,"..", "temp"));
 
 
-    #Calculate the classification of files
-    filename , value = cl.main_classification();
+        #Calculate the classification of files
+        filename , value = cl.main_classification();
 
-    results = reverseConnection(records,filename,value,results)
-    #removefiles
+        results = reverseConnection(records,filename,value,results)
+        #removefiles
 
-    for root, dirs, files in os.walk(os.path.join(SRC_PATH,"..","temp")):
-        for f in files:
-            os.unlink(os.path.join(root, f))
-        for d in dirs:
-            shutil.rmtree(os.path.join(root, d))
+        for root, dirs, files in os.walk(os.path.join(SRC_PATH,"..","temp")):
+            for f in files:
+                os.unlink(os.path.join(root, f))
+            for d in dirs:
+                shutil.rmtree(os.path.join(root, d))
+
+    # for src, file in records.items():
+    #     if src.startswith("https:") and src.endswith(".js"):
+    #         for row in cacheData.index:
+
 
     return results;
 
@@ -82,8 +106,17 @@ def reverseConnection(records,filenames,value,results):
     for src, file in records.items():
         print(src,file);
         if (file.split(".."))[1] in arr:
-            index = arr.index((file.split(".."))[1] );
+            index = arr.index((file.split(".."))[1]);
             results[src] = value[index];
+            ## Storing in csv ##
+            if src.startswith("https:") and src.endswith(".js"):
+                cacherow = [src, value[index]];
+            else:
+                md5val = (hashlib.md5(src.encode('utf-8')).hexdigest())
+                cacherow = [md5val, value[index]];
+            with open(r'cachedata.csv', 'a') as f:
+                writer = csv.writer(f)
+                writer.writerow(cacherow)
     print(results)
     return results;
 
