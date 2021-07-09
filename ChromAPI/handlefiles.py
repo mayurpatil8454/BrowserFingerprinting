@@ -108,7 +108,7 @@ def reverseConnection(records,filenames,value,results):
             index = arr.index((file.split(".."))[1]);
             results[src] = value[index];
             ## Storing in csv ##
-            if src.startswith("https:") and src.endswith(".js"):
+            if src.startswith("https:") and ".js" in src:
                 cacherow = [src, value[index]];
             else:
                 md5val = (hashlib.md5(src.encode('utf-8')).hexdigest())
