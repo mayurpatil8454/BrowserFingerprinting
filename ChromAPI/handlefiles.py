@@ -23,7 +23,7 @@ def handlefiles(srclist, codelist):
     for val in codelist:
         if val not in fpset:
             FileName = os.path.join(SRC_PATH,"..","temp","Check" + str(counter)+".js");
-            AnalyzedFileName = os.path.join(SRC_PATH,"..","temp","Analysis","CFG","Check" + str(counter));
+            AnalyzedFileName = os.path.join(SRC_PATH,"..","temp","Analysis","CFG","Check" + str(counter)+ ".pbz2");
             records[val] = AnalyzedFileName
             f = open(FileName, "w+", encoding="utf-8")
             f.write(val + "")
