@@ -32,13 +32,17 @@ def handlefiles(srclist, codelist):
                 break;
         if flag:
             FileName = os.path.join(SRC_PATH,"..","temp","Check" + str(counter)+".js");
-            AnalyzedFileName = os.path.join(SRC_PATH,"..","temp","Analysis","CFG","Check" + str(counter)+ ".pbz2");
-            records[val] = AnalyzedFileName
             f = open(FileName, "w+", encoding="utf-8")
-
             f.write(val + "")
             counter+=1;
             f.close();
+            sizelimit = os.path.getsize(os.path.join(SRC_PATH,"..","temp","Check" + str(counter)+".js"))
+            if sizelimit < 2000000:
+                AnalyzedFileName = os.path.join(SRC_PATH, "..", "temp", "Analysis", "CFG",
+                                                "Check" + str(counter) + ".pbz2");
+                records[val] = AnalyzedFileName;
+            else:
+                os.unlink(os.path.join(SRC_PATH,"..","temp","Check" + str(counter)+".js"))
         # else:
         #     results[val] = fpset[val];
     for url in srclist:
@@ -62,11 +66,18 @@ def handlefiles(srclist, codelist):
                 continue;
             if response.status_code == 200:
                 FileName = os.path.join(SRC_PATH, "..", "temp", "Check" + str(counter)+".js");
-                AnalyzedFileName = os.path.join(SRC_PATH, "..", "temp", "Analysis", "CFG", "Check" + str(counter) + ".pbz2");
-                records[url] =AnalyzedFileName;
+
                 f = open(FileName, "w+", encoding="utf-8")
                 f.write(response.text + "");
                 counter += 1;
+                f.close();
+                sizelimit = os.path.getsize(os.path.join(SRC_PATH, "..", "temp", "Check" + str(counter) + ".js"))
+                if sizelimit < 2000000:
+                    AnalyzedFileName = os.path.join(SRC_PATH, "..", "temp", "Analysis", "CFG",
+                                                    "Check" + str(counter) + ".pbz2");
+                    records[url] = AnalyzedFileName;
+                else:
+                    os.unlink(os.path.join(SRC_PATH, "..", "temp", "Check" + str(counter) + ".js"))
         # else:
         #     results[url] = fpset[url];
     #Calculate the CFG of all files
