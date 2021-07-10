@@ -34,13 +34,14 @@ def handlefiles(srclist, codelist):
             FileName = os.path.join(SRC_PATH,"..","temp","Check" + str(counter)+".js");
             f = open(FileName, "w+", encoding="utf-8")
             f.write(val + "")
-            counter+=1;
+
             f.close();
             sizelimit = os.path.getsize(os.path.join(SRC_PATH,"..","temp","Check" + str(counter)+".js"))
             if sizelimit < 2000000:
                 AnalyzedFileName = os.path.join(SRC_PATH, "..", "temp", "Analysis", "CFG",
                                                 "Check" + str(counter) + ".pbz2");
                 records[val] = AnalyzedFileName;
+                counter += 1;
             else:
                 os.unlink(os.path.join(SRC_PATH,"..","temp","Check" + str(counter)+".js"))
         # else:
@@ -69,13 +70,14 @@ def handlefiles(srclist, codelist):
 
                 f = open(FileName, "w+", encoding="utf-8")
                 f.write(response.text + "");
-                counter += 1;
+
                 f.close();
                 sizelimit = os.path.getsize(os.path.join(SRC_PATH, "..", "temp", "Check" + str(counter) + ".js"))
                 if sizelimit < 2000000:
                     AnalyzedFileName = os.path.join(SRC_PATH, "..", "temp", "Analysis", "CFG",
                                                     "Check" + str(counter) + ".pbz2");
                     records[url] = AnalyzedFileName;
+                    counter += 1;
                 else:
                     os.unlink(os.path.join(SRC_PATH, "..", "temp", "Check" + str(counter) + ".js"))
         # else:
